@@ -1,22 +1,29 @@
 package com.example.socialmedia.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Camera
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.More
@@ -40,12 +47,15 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.SubcomposeAsyncImage
 import com.example.socialmedia.R
+import com.example.socialmedia.data.models.User
 import com.example.socialmedia.ui.theme.facebookBlue
 import com.example.socialmedia.ui.theme.facebookFucsiaColor
 import com.example.socialmedia.ui.theme.facebookGray
@@ -69,6 +79,7 @@ val avatarModifier = Modifier
 fun HomeScreen(homeViewModel: HomeViewModel = hiltViewModel()) {
 
     val currentUser = homeViewModel.currentUser.value
+    val users = homeViewModel.users.value
     Scaffold(modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
@@ -76,7 +87,7 @@ fun HomeScreen(homeViewModel: HomeViewModel = hiltViewModel()) {
                 navigationIcon = {
                     // Icon
                     Icon(
-                        modifier = Modifier.size(20.dp),
+                        modifier = Modifier.size(40.dp),
                         imageVector = FontAwesomeIcons.Brands.Facebook,
                         contentDescription = null,
                         tint = facebookBlue
@@ -117,8 +128,8 @@ fun HomeScreen(homeViewModel: HomeViewModel = hiltViewModel()) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(40.dp)
                             .padding(horizontal = 12.dp)
+                            .height(40.dp)
                             .clip(RoundedCornerShape(50))
                             .background(facebookGray),
                         contentAlignment = Alignment.Center
@@ -177,6 +188,131 @@ fun HomeScreen(homeViewModel: HomeViewModel = hiltViewModel()) {
                     }
                 }
             }
+            // Story
+            item {
+                StoryBoard(currentUser = currentUser, userList = users)
+            }
+        }
+    }
+}
+
+@Composable
+fun StoryBoard(currentUser: User, userList: List<User>) {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text(
+            modifier = Modifier.padding(horizontal = 20.dp),
+            text = "Story",
+            style = MaterialTheme.typography.titleMedium
+        )
+        Spacer(modifier = Modifier.size(10.dp))
+
+        LazyRow(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+
+            item {
+                Spacer(modifier = Modifier.size(5.dp))
+            }
+            item {
+                StoryCard(
+                    bannerImage = currentUser.bannerImage,
+                    title = "Create Story",
+                    color = facebookBlue
+                )
+            }
+            items(userList) { user ->
+                StoryCard(
+                    avatarImage = user.avatar,
+                    bannerImage = user.bannerImage,
+                    title = user.name,
+                    textColor = Color.Black
+                )
+
+            }
+            item {
+                Spacer(modifier = Modifier.size(10.dp))
+            }
+        }
+
+    }
+}
+
+@Composable
+fun StoryCard(
+    bannerImage: String,
+    avatarImage: String? = null,
+    title: String,
+    color: Color = Color.White,
+    textColor: Color = Color.White
+) {
+
+    Card(
+        modifier = Modifier
+            .height(170.dp)
+            .width(90.dp)
+            .clip(RoundedCornerShape(20.dp))
+            .background(color),
+        backgroundColor = color,
+        elevation = 10.dp,
+        shape = RoundedCornerShape(12.dp)
+    ) {
+        Box(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            LoadImage(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(110.dp),
+                url = bannerImage
+            )
+
+            Column(
+                modifier = Modifier
+                    .wrapContentHeight()
+                    .width(50.dp)
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 8.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                if (avatarImage == null) {
+                    // CHECK the SHADOW
+                    Box(
+                        modifier = Modifier
+                            .size(40.dp)
+                            .clip(CircleShape)
+                            .background(Color.White),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = null,
+                            tint = facebookBlue
+                        )
+                    }
+                } else {
+
+                    LoadImage(
+                        modifier = avatarModifier.then(
+                            Modifier.border(2.dp, color = Color.White, shape = CircleShape)
+                        ),
+                        url = avatarImage
+                    )
+                }
+                Text(
+                    text = title,
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.bodySmall,
+                    fontWeight = FontWeight.Bold,
+                    overflow = TextOverflow.Clip,
+                    maxLines = 2,
+                    color = textColor
+                )
+            }
+
         }
     }
 }
@@ -187,7 +323,7 @@ fun CommonButton(
     tintColor: Color = Color.White,
     icon: ImageVector? = null,
     text: String? = null,
-    width: Dp = 120.dp,
+    width: Dp = 130.dp,
     onClick: () -> Unit
 ) {
     Box(
