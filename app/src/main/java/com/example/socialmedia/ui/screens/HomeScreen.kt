@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -26,11 +25,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Camera
 import androidx.compose.material.icons.filled.Image
-import androidx.compose.material.icons.filled.More
 import androidx.compose.material.icons.filled.MoreHoriz
-import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.People
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -55,6 +52,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.SubcomposeAsyncImage
 import com.example.socialmedia.R
+import com.example.socialmedia.data.models.Poster
 import com.example.socialmedia.data.models.User
 import com.example.socialmedia.ui.theme.facebookBlue
 import com.example.socialmedia.ui.theme.facebookFucsiaColor
@@ -63,7 +61,6 @@ import com.example.socialmedia.ui.theme.facebookGreenColor
 import com.example.socialmedia.ui.theme.facebookTextGrayColor
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.placeholder
-import com.google.accompanist.placeholder.material.shimmer
 import com.google.accompanist.placeholder.shimmer
 import compose.icons.FontAwesomeIcons
 import compose.icons.fontawesomeicons.Brands
@@ -80,6 +77,8 @@ fun HomeScreen(homeViewModel: HomeViewModel = hiltViewModel()) {
 
     val currentUser = homeViewModel.currentUser.value
     val users = homeViewModel.users.value
+    val posters = homeViewModel.posters.value
+
     Scaffold(modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
@@ -192,6 +191,61 @@ fun HomeScreen(homeViewModel: HomeViewModel = hiltViewModel()) {
             item {
                 StoryBoard(currentUser = currentUser, userList = users)
             }
+
+            items(posters) { item: Poster ->
+                CardPoster(item)
+            }
+
+        }
+    }
+}
+
+
+@Composable
+fun CardPoster(item: Poster) {
+
+    Box(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.fillMaxWidth()) {
+
+            // HeaderPost
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+
+                Row(modifier = Modifier) {
+                    LoadImage(
+                        modifier = avatarModifier,
+                        url = item.user.avatar
+                    )
+                    Spacer(modifier = Modifier.size(20.dp))
+                    Column(modifier = Modifier) {
+                        Text(
+                            text = item.user.name,
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                        Row(modifier = Modifier) {
+                            Text(
+                                text = item.time,
+                                color = facebookTextGrayColor,
+                                style = MaterialTheme.typography.bodySmall
+                            )
+                            Spacer(modifier = Modifier.size(10.dp))
+                            Icon(
+                                modifier = Modifier.size(16.dp),
+                                imageVector = Icons.Default.People,
+                                contentDescription = null
+                            )
+                        }
+                    }
+                }
+
+            }
+
+            // Content
         }
     }
 }
