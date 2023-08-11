@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -21,6 +22,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.Divider
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Camera
@@ -196,6 +198,12 @@ fun HomeScreen(homeViewModel: HomeViewModel = hiltViewModel()) {
                 CardPoster(item)
             }
 
+            // Bottom Space
+
+            item { 
+                Spacer(modifier = Modifier.size(40.dp))
+            }
+
         }
     }
 }
@@ -204,50 +212,235 @@ fun HomeScreen(homeViewModel: HomeViewModel = hiltViewModel()) {
 @Composable
 fun CardPoster(item: Poster) {
 
-    Box(modifier = Modifier.fillMaxWidth()) {
-        Column(modifier = Modifier.fillMaxWidth()) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight(), verticalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight(),
 
-            // HeaderPost
-            Row(
+            ) {
+            Divider(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 12.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+                    .height(8.dp), color = facebookGray
+            )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight(),
+                verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
 
-                Row(modifier = Modifier) {
-                    LoadImage(
-                        modifier = avatarModifier,
-                        url = item.user.avatar
-                    )
-                    Spacer(modifier = Modifier.size(20.dp))
-                    Column(modifier = Modifier) {
-                        Text(
-                            text = item.user.name,
-                            style = MaterialTheme.typography.titleMedium
+                // HeaderPost
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+
+                    Row(modifier = Modifier) {
+                        LoadImage(
+                            modifier = avatarModifier,
+                            url = item.user.avatar
                         )
-                        Row(modifier = Modifier) {
+                        Spacer(modifier = Modifier.size(20.dp))
+                        Column(modifier = Modifier) {
                             Text(
-                                text = item.time,
-                                color = facebookTextGrayColor,
-                                style = MaterialTheme.typography.bodySmall
+                                text = item.user.name,
+                                style = MaterialTheme.typography.titleMedium
                             )
-                            Spacer(modifier = Modifier.size(10.dp))
-                            Icon(
-                                modifier = Modifier.size(16.dp),
-                                imageVector = Icons.Default.People,
-                                contentDescription = null
-                            )
+                            Row(modifier = Modifier) {
+                                Text(
+                                    text = item.time,
+                                    color = facebookTextGrayColor,
+                                    style = MaterialTheme.typography.bodySmall
+                                )
+                                Spacer(modifier = Modifier.size(10.dp))
+                                Icon(
+                                    modifier = Modifier.size(16.dp),
+                                    imageVector = Icons.Default.People,
+                                    contentDescription = null
+                                )
+                            }
                         }
                     }
+
                 }
+                Text(
+                    modifier = Modifier.padding(horizontal = 12.dp),
+                    text = item.posterText,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+
+                when (item.posterImage.size) {
+                    1 -> {
+                        PosterImage(item.posterImage.first())
+                    }
+
+                    2 -> {
+                        Poster2Images(item.posterImage)
+                    }
+
+                    3 -> {
+                        Poster3Images(item.posterImage)
+                    }
+
+                    else -> PosterMoreImages(item.posterImage)
+                }
+            }
+
+        }
+
+
+    }
+}
+
+@Composable
+fun PosterMoreImages(posterImage: List<String>) {
+    val image1 = posterImage.first()
+    val image2 = posterImage[1]
+    val image3 = posterImage[2]
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(200.dp)
+    ) {
+
+        LoadImage(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f), url = image1
+        )
+        Spacer(modifier = Modifier.size(2.dp))
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+        ) {
+            LoadImage(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .weight(1f), url = image2
+            )
+            Spacer(modifier = Modifier.size(2.dp))
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .weight(1f),
+                contentAlignment = Alignment.Center
+            ) {
+                LoadImage(
+                    modifier = Modifier
+                        .fillMaxSize(), url = image3
+                )
+
+                Box(
+                    Modifier
+                        .fillMaxSize()
+                        .background(Color.Black.copy(alpha = 0.6f))
+                )
+
+                Text(
+                    text = "${posterImage.size - 3} +",
+                    color = Color.White,
+                    style = MaterialTheme.typography.titleLarge
+                )
 
             }
 
-            // Content
+
+        }
+
+    }
+}
+
+
+@Composable
+fun Poster3Images(posterImage: List<String>) {
+
+    val image1 = posterImage.first()
+    val image2 = posterImage[1]
+    val image3 = posterImage[2]
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(200.dp)
+    ) {
+        Column {
+            LoadImage(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f), url = image1
+            )
+            Spacer(modifier = Modifier.size(2.dp))
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+            ) {
+                LoadImage(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .weight(1f), url = image2
+                )
+                Spacer(modifier = Modifier.size(2.dp))
+                LoadImage(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .weight(1f), url = image3
+                )
+
+            }
+
         }
     }
+}
+
+@Composable
+fun Poster2Images(posterImage: List<String>) {
+    // TODO: NEED TO BE TEST
+
+    val image1 = posterImage.first()
+    val image2 = posterImage[1]
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(200.dp)
+    ) {
+        LoadImage(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+            url = image1
+        )
+        Spacer(modifier = Modifier.size(2.dp))
+
+        LoadImage(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+            url = image2
+        )
+    }
+}
+
+@Composable
+fun PosterImage(url: String) {
+    LoadImage(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(200.dp),
+        url = url
+    )
 }
 
 @Composable
