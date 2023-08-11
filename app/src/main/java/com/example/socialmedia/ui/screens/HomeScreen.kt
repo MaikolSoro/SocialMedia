@@ -26,10 +26,15 @@ import androidx.compose.material.Divider
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Camera
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.People
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.outlined.Comment
+import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -60,6 +65,7 @@ import com.example.socialmedia.ui.theme.facebookBlue
 import com.example.socialmedia.ui.theme.facebookFucsiaColor
 import com.example.socialmedia.ui.theme.facebookGray
 import com.example.socialmedia.ui.theme.facebookGreenColor
+import com.example.socialmedia.ui.theme.facebookRedColor
 import com.example.socialmedia.ui.theme.facebookTextGrayColor
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.placeholder
@@ -200,7 +206,7 @@ fun HomeScreen(homeViewModel: HomeViewModel = hiltViewModel()) {
 
             // Bottom Space
 
-            item { 
+            item {
                 Spacer(modifier = Modifier.size(40.dp))
             }
 
@@ -297,7 +303,46 @@ fun CardPoster(item: Poster) {
 
         }
 
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceAround
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.FavoriteBorder,
+                    contentDescription = null,
+                    tint = facebookRedColor
+                )
+                Text(text = "${item.likes}", style = MaterialTheme.typography.bodySmall)
+            }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Comment,
+                    contentDescription = null
+                )
 
+                Text(text = "${item.comments}", style = MaterialTheme.typography.bodySmall)
+            }
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Share,
+                    contentDescription = null
+                )
+
+                Text(text = "${item.shared}", style = MaterialTheme.typography.bodySmall)
+            }
+        }
     }
 }
 
