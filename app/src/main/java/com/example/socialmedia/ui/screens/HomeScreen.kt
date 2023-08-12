@@ -221,86 +221,80 @@ fun CardPoster(item: Poster) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .wrapContentHeight(), verticalArrangement = Arrangement.spacedBy(10.dp)
+            .wrapContentHeight(),
+        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        Box(
+        Divider(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(8.dp),
+            color = facebookGray
+        )
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight(),
+            verticalArrangement = Arrangement.spacedBy(20.dp)
+        ) {
 
-            ) {
-            Divider(
+            // HeaderPost
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(8.dp), color = facebookGray
-            )
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight(),
-                verticalArrangement = Arrangement.spacedBy(20.dp)
+                    .padding(horizontal = 12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
 
-                // HeaderPost
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 12.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-
-                    Row(modifier = Modifier) {
-                        LoadImage(
-                            modifier = avatarModifier,
-                            url = item.user.avatar
+                Row(modifier = Modifier) {
+                    LoadImage(
+                        modifier = avatarModifier,
+                        url = item.user.avatar
+                    )
+                    Spacer(modifier = Modifier.size(20.dp))
+                    Column(modifier = Modifier) {
+                        Text(
+                            text = item.user.name,
+                            style = MaterialTheme.typography.titleMedium
                         )
-                        Spacer(modifier = Modifier.size(20.dp))
-                        Column(modifier = Modifier) {
+                        Row(modifier = Modifier) {
                             Text(
-                                text = item.user.name,
-                                style = MaterialTheme.typography.titleMedium
+                                text = item.time,
+                                color = facebookTextGrayColor,
+                                style = MaterialTheme.typography.bodySmall
                             )
-                            Row(modifier = Modifier) {
-                                Text(
-                                    text = item.time,
-                                    color = facebookTextGrayColor,
-                                    style = MaterialTheme.typography.bodySmall
-                                )
-                                Spacer(modifier = Modifier.size(10.dp))
-                                Icon(
-                                    modifier = Modifier.size(16.dp),
-                                    imageVector = Icons.Default.People,
-                                    contentDescription = null
-                                )
-                            }
+                            Spacer(modifier = Modifier.size(10.dp))
+                            Icon(
+                                modifier = Modifier.size(16.dp),
+                                imageVector = Icons.Default.People,
+                                contentDescription = null
+                            )
                         }
                     }
-
                 }
-                Text(
-                    modifier = Modifier.padding(horizontal = 12.dp),
-                    text = item.posterText,
-                    style = MaterialTheme.typography.bodyMedium
-                )
 
-                when (item.posterImage.size) {
-                    1 -> {
-                        PosterImage(item.posterImage.first())
-                    }
-
-                    2 -> {
-                        Poster2Images(item.posterImage)
-                    }
-
-                    3 -> {
-                        Poster3Images(item.posterImage)
-                    }
-
-                    else -> PosterMoreImages(item.posterImage)
-                }
             }
+            Text(
+                modifier = Modifier.padding(horizontal = 12.dp),
+                text = item.posterText,
+                style = MaterialTheme.typography.bodyMedium
+            )
 
+            when (item.posterImage.size) {
+                1 -> {
+                    PosterImage(item.posterImage.first())
+                }
+
+                2 -> {
+                    Poster2Images(item.posterImage)
+                }
+
+                3 -> {
+                    Poster3Images(item.posterImage)
+                }
+
+                else -> PosterMoreImages(item.posterImage)
+            }
         }
 
         Row(
@@ -317,7 +311,10 @@ fun CardPoster(item: Poster) {
                     contentDescription = null,
                     tint = facebookRedColor
                 )
-                Text(text = "${item.likes}", style = MaterialTheme.typography.bodySmall)
+                Text(
+                    text = "${item.likes}",
+                    style = MaterialTheme.typography.bodySmall
+                )
             }
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -328,7 +325,10 @@ fun CardPoster(item: Poster) {
                     contentDescription = null
                 )
 
-                Text(text = "${item.comments}", style = MaterialTheme.typography.bodySmall)
+                Text(
+                    text = "${item.comments}",
+                    style = MaterialTheme.typography.bodySmall
+                )
             }
 
             Row(
@@ -345,6 +345,7 @@ fun CardPoster(item: Poster) {
         }
     }
 }
+
 
 @Composable
 fun PosterMoreImages(posterImage: List<String>) {
