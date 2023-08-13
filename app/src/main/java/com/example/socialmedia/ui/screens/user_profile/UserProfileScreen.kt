@@ -1,5 +1,6 @@
 package com.example.socialmedia.ui.screens.user_profile
 
+import android.R
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -44,6 +45,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -145,7 +153,7 @@ fun UserProfileScreen(userProfileViewModel: UserProfileViewModel = hiltViewModel
                             }
                             CommonButton(
                                 icon = Icons.Rounded.Textsms,
-                                color = facebookDarkGray,
+                                color = facebookGray,
                                 tintColor = Color.Black,
                                 text = "Message",
                                 width = 130.dp
@@ -183,14 +191,20 @@ fun UserProfileScreen(userProfileViewModel: UserProfileViewModel = hiltViewModel
                             .padding(horizontal = 16.dp, vertical = 8.dp),
                         verticalArrangement = Arrangement.SpaceAround
                     ) {
-                        TextIcon(text = currentUser.address, icon = Icons.Default.LocationOn)
+                        CustomTextWithBold(
+                            currentUser,
+                            icon = Icons.Default.LocationOn
+                        )
+                        //TextIcon(text = currentUser.address, icon = Icons.Default.LocationOn)
                         TextIcon(
                             text = currentUser.instagram,
+                            fontWeight = FontWeight.Bold,
                             icon = FontAwesomeIcons.Brands.Instagram
                         )
                         TextIcon(
                             text = "See full ${userOnlyName.value}'s About info",
-                            icon = Icons.Default.Person
+                            icon = Icons.Default.Person,
+                            fontWeight = FontWeight.Normal,
                         )
                     }
                 }
@@ -202,8 +216,42 @@ fun UserProfileScreen(userProfileViewModel: UserProfileViewModel = hiltViewModel
 }
 
 @Composable
+fun CustomTextWithBold(
+    currentUser: User,
+    icon: ImageVector,
+    tintColor: Color = Color.Gray,
+    textColor: Color = MaterialTheme.colorScheme.onBackground
+) {
+    val formattedText = buildAnnotatedString {
+        withStyle(style = SpanStyle(fontWeight = FontWeight.Normal)) {
+            append("From ")
+        }
+        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+            append(currentUser.address)
+        }
+    }
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            modifier = Modifier.size(26.dp),
+            imageVector = icon,
+            contentDescription = null,
+            tint = tintColor
+        )
+        Spacer(modifier = Modifier.size(8.dp))
+
+        Text(text = formattedText, color = textColor)
+
+    }
+}
+
+
+@Composable
 fun TextIcon(
     text: String,
+    fontWeight: FontWeight,
     icon: ImageVector,
     tintColor: Color = Color.Gray,
     textColor: Color = MaterialTheme.colorScheme.onBackground
@@ -219,7 +267,7 @@ fun TextIcon(
             tint = tintColor
         )
         Spacer(modifier = Modifier.size(8.dp))
-        Text(text = text, color = textColor)
+        Text(text = text, color = textColor, fontWeight = fontWeight)
     }
 }
 
