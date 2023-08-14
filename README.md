@@ -12,7 +12,7 @@
 
 ### Social App ♥.
 
-|                               Pantalla principal                               |                                   Resultado                                    |
+|                               Home Screen                                      |                                   User Profile                                 |
 |:------------------------------------------------------------------------------:|:------------------------------------------------------------------------------:|
 |  <img src="https://i.imgur.com/tvQyULU.png" style="height: 50%; width:50%;"/>  |  <img src="https://i.imgur.com/Wzwiore.png" style="height: 50%; width:50%;"/>  |
 
