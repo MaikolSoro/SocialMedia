@@ -8,6 +8,14 @@
 - [Hilt-ViewModel](https://developer.android.com/training/dependency-injection/hilt-jetpack) - DI for injecting `ViewModel`.
 - [Jetpack Compose UI Toolkit](https://developer.android.com/jetpack/compose) - Modern UI development toolkit.
 
+---
+
+### Social App ♥.
+
+|                               Pantalla principal                               |                                   Resultado                                    |
+|:------------------------------------------------------------------------------:|:------------------------------------------------------------------------------:|
+|  <img src="https://i.imgur.com/tvQyULU.png" style="height: 50%; width:50%;"/>  |  <img src="https://i.imgur.com/Wzwiore.png" style="height: 50%; width:50%;"/>  |
+
 ### Contributing 🔥⚡
 1. Fork it!
 2. Create your feature branch: `git checkout -b my-new-feature`
